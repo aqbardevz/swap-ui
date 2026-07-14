@@ -1,0 +1,31 @@
+.row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  margin-top: var(--space-3);
+}
+
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: var(--fs-xs);
+  font-weight: 600;
+  padding: 4px 10px;
+  border-radius: var(--radius-full);
+}
+
+.chipLabel {
+  font-weight: 500;
+  opacity: 0.7;
+}
+
+.up {
+  color: var(--success);
+  background: var(--success-soft);
+}
+
+.down {
+  color: var(--danger);
+  background: var(--danger-soft);
+}
