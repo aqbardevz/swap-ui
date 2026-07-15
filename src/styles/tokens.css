@@ -33,11 +33,7 @@
   /* Layout */
   --container-width: 1180px;
 
-  /* Brand accent (stable across themes) — Radiant Orange */
-  --accent: #ff4f18;
-  --accent-hover: #ff6b3a;
-  --accent-soft: rgba(255, 79, 24, 0.14);
-  --accent-contrast: #ffffff;
+  /* Brand accent is monochrome and inverts per theme — see themes.css */
 
   /* Semantic colors */
   --success: #16a34a;

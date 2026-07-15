@@ -35,9 +35,16 @@ export function Header() {
 
         <nav className={styles.nav}>
           {NAV_ITEMS.map((item) => {
-            const active = item.href === "/" ? pathname === "/" : pathname.startsWith(item.href);
+            const active =
+              item.href === "/"
+                ? pathname === "/"
+                : pathname.startsWith(item.href);
             return (
-              <Link key={item.href} href={item.href} className={active ? styles.navItemActive : styles.navItem}>
+              <Link
+                key={item.href}
+                href={item.href}
+                className={active ? styles.navItemActive : styles.navItem}
+              >
                 {item.label}
               </Link>
             );
@@ -45,10 +52,6 @@ export function Header() {
         </nav>
 
         <div className={styles.actions}>
-          <span className={styles.network}>
-            <span className={styles.networkDot} />
-            Ethereum
-          </span>
           <ThemeToggle />
           <WalletConnectButton />
         </div>
