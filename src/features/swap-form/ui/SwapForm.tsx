@@ -2,7 +2,7 @@
 
 import { TokenSelect } from "@/features/token-select";
 import { IconButton } from "@/shared/ui/IconButton";
-import { ArrowDownIcon } from "@/shared/ui/icons";
+import { CgArrowsExchangeAltV } from "react-icons/cg";
 import { formatAmount, formatUsd } from "@/shared/lib/format";
 import { useSwapForm } from "../model/useSwapForm";
 import styles from "./SwapForm.module.css";
@@ -43,21 +43,34 @@ export function SwapForm({ form }: { form: ReturnType<typeof useSwapForm> }) {
             inputMode="decimal"
             autoComplete="off"
           />
-          <TokenSelect tokens={tokens} selected={sellToken} onChange={setSellToken} />
+          <TokenSelect
+            tokens={tokens}
+            selected={sellToken}
+            onChange={setSellToken}
+          />
         </div>
-        <div className={styles.usdValue}>{formatUsd(Number(sellAmount || 0) * sellToken.price)}</div>
+        <div className={styles.usdValue}>
+          {formatUsd(Number(sellAmount || 0) * sellToken.price)}
+        </div>
       </div>
 
       <div className={styles.flipRow}>
-        <IconButton variant="accent" className={styles.flipButton} aria-label="Flip tokens" onClick={flip}>
-          <ArrowDownIcon size={18} />
+        <IconButton
+          variant="accent"
+          className={styles.flipButton}
+          aria-label="Flip tokens"
+          onClick={flip}
+        >
+          <CgArrowsExchangeAltV size={18} />
         </IconButton>
       </div>
 
       <div className={styles.panel}>
         <div className={styles.panelHeader}>
           <span>Buy</span>
-          <span className={styles.balance}>Balance: {formatAmount(buyToken.balance, 4)}</span>
+          <span className={styles.balance}>
+            Balance: {formatAmount(buyToken.balance, 4)}
+          </span>
         </div>
         <div className={styles.panelBody}>
           <input
@@ -67,9 +80,15 @@ export function SwapForm({ form }: { form: ReturnType<typeof useSwapForm> }) {
             placeholder="0"
             tabIndex={-1}
           />
-          <TokenSelect tokens={tokens} selected={buyToken} onChange={setBuyToken} />
+          <TokenSelect
+            tokens={tokens}
+            selected={buyToken}
+            onChange={setBuyToken}
+          />
         </div>
-        <div className={styles.usdValue}>{formatUsd(Number(buyAmount || 0) * buyToken.price)}</div>
+        <div className={styles.usdValue}>
+          {formatUsd(Number(buyAmount || 0) * buyToken.price)}
+        </div>
       </div>
 
       <div className={styles.rateRow}>
