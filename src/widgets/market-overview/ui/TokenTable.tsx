@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useMemo, useState, type CSSProperties } from "react";
 import Link from "next/link";
 import { TokenIcon, type Token } from "@/entities/token";
 import { formatCompactUsd, formatPercent, formatUsd } from "@/shared/lib/format";
@@ -11,6 +11,12 @@ import styles from "./TokenTable.module.css";
 
 type SortKey = "marketCapRank" | "price" | "change24h" | "volume24h";
 type SortDirection = "asc" | "desc";
+
+/** Scales badge intensity with move size, capped at a 10% swing. */
+function getHeat(change: number): string {
+  const magnitude = Math.min(Math.abs(change), 10) / 10;
+  return `${8 + magnitude * 22}%`;
+}
 
 const COLUMNS: { key: SortKey; label: string; className?: string }[] = [
   { key: "marketCapRank", label: "Token" },
@@ -98,7 +104,10 @@ export function TokenTable({ tokens }: { tokens: Token[] }) {
                 </span>
               </span>
               <span className={styles.price}>{formatUsd(token.price)}</span>
-              <span className={cn(styles.change, positive ? styles.up : styles.down)}>
+              <span
+                className={cn(styles.change, positive ? styles.up : styles.down)}
+                style={{ "--heat": getHeat(token.change24h) } as CSSProperties}
+              >
                 {formatPercent(token.change24h)}
               </span>
               <span className={cn(styles.volume, styles.hideSmall)}>{formatCompactUsd(token.volume24h)}</span>

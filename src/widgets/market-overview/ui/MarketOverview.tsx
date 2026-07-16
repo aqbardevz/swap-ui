@@ -1,7 +1,9 @@
 import { Card } from "@/shared/ui/Card";
 import type { Token } from "@/entities/token";
 import type { GlobalStats } from "@/entities/market";
-import { StatCard, type MarketStat } from "./StatCard";
+import { formatCompactUsd, formatShare } from "@/shared/lib/format";
+import { MetricsBar, type MetricSegment } from "./MetricsBar";
+import { MoversList } from "./MoversList";
 import { TokenTable } from "./TokenTable";
 import styles from "./MarketOverview.module.css";
 
@@ -11,29 +13,40 @@ interface MarketOverviewProps {
 }
 
 export function MarketOverview({ tokens, global }: MarketOverviewProps) {
-  const stats: MarketStat[] = [
+  const segments: MetricSegment[] = [
     {
       label: "Total Market Cap",
-      value: global.totalMarketCap,
+      value: formatCompactUsd(global.totalMarketCap),
       delta: global.marketCapChange24h,
-      format: "usd-compact",
     },
-    { label: "24h Trading Volume", value: global.totalVolume, format: "usd-compact" },
-    { label: "BTC Dominance", value: global.btcDominance, format: "share" },
-    { label: "Active Cryptocurrencies", value: global.activeCryptocurrencies, format: "count-compact" },
+    { label: "24h Volume", value: formatCompactUsd(global.totalVolume) },
+    { label: "BTC Dominance", value: formatShare(global.btcDominance) },
+    { label: "Tracked Assets", value: String(tokens.length) },
   ];
 
-  return (
-    <Card className={styles.card}>
-      <h2 className={styles.title}>Market overview</h2>
+  const gainers = [...tokens]
+    .filter((token) => token.change24h > 0)
+    .sort((a, b) => b.change24h - a.change24h)
+    .slice(0, 3);
 
-      <div className={styles.statsGrid}>
-        {stats.map((stat) => (
-          <StatCard key={stat.label} stat={stat} />
-        ))}
+  const losers = [...tokens]
+    .filter((token) => token.change24h < 0)
+    .sort((a, b) => a.change24h - b.change24h)
+    .slice(0, 3);
+
+  return (
+    <div className={styles.stack}>
+      <MetricsBar segments={segments} />
+
+      <div className={styles.moversGrid}>
+        <MoversList title="Top Gainers · 24h" tokens={gainers} tone="positive" />
+        <MoversList title="Top Losers · 24h" tokens={losers} tone="negative" />
       </div>
 
-      <TokenTable tokens={tokens} />
-    </Card>
+      <Card className={styles.tableCard}>
+        <h2 className={styles.tableTitle}>All Tokens</h2>
+        <TokenTable tokens={tokens} />
+      </Card>
+    </div>
   );
 }

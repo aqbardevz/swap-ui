@@ -151,12 +151,12 @@ a.row:hover {
 
 .up {
   color: var(--success);
-  background: var(--success-soft);
+  background: color-mix(in srgb, var(--success) var(--heat, 14%), transparent);
 }
 
 .down {
   color: var(--danger);
-  background: var(--danger-soft);
+  background: color-mix(in srgb, var(--danger) var(--heat, 14%), transparent);
 }
 
 .volume {
