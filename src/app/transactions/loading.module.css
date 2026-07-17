@@ -1,0 +1,9 @@
+.spacer {
+  display: block;
+  margin-bottom: var(--space-4);
+}
+
+.groupSpacer {
+  display: block;
+  margin-bottom: var(--space-2);
+}
