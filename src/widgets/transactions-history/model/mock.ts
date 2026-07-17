@@ -1,4 +1,5 @@
 import { findToken, type Token } from "@/entities/token";
+import { getDayLabel } from "@/shared/lib/format";
 
 export interface Transaction {
   id: string;
@@ -10,6 +11,11 @@ export interface Transaction {
   timestamp: string;
   status: "success" | "pending";
   txHash: string;
+}
+
+export interface TransactionGroup {
+  label: string;
+  transactions: Transaction[];
 }
 
 interface TransactionSeed {
@@ -80,6 +86,39 @@ const TRANSACTION_SEEDS: TransactionSeed[] = [
     status: "success",
     txHash: "0x5c2a",
   },
+  {
+    id: "6",
+    fromSymbol: "UNI",
+    toSymbol: "ETH",
+    fromAmount: 45,
+    toAmount: 0.09,
+    account: "0x8b1Ac2f4D6e9B3c7A5d1F8e2C4b6A9d3F7e1C5B8",
+    minutesAgo: 1920,
+    status: "success",
+    txHash: "0x3e7f",
+  },
+  {
+    id: "7",
+    fromSymbol: "USDC",
+    toSymbol: "WBTC",
+    fromAmount: 3200,
+    toAmount: 0.0512,
+    account: "0x6dA3f1B8c2E5a7D4f9B1c6E3a8D5f2B7c4A1E9D6",
+    minutesAgo: 2100,
+    status: "pending",
+    txHash: "0x1b9c",
+  },
+  {
+    id: "8",
+    fromSymbol: "ETH",
+    toSymbol: "ARB",
+    fromAmount: 1.2,
+    toAmount: 13480,
+    account: "0x2fC8b5A3e9D1c7B4a6F2e8D5c3A9b1F7d4E6C2A8",
+    minutesAgo: 4300,
+    status: "success",
+    txHash: "0x9a04",
+  },
 ];
 
 /**
@@ -101,4 +140,21 @@ export function buildTransactions(tokens: Token[]): Transaction[] {
     status: seed.status,
     txHash: seed.txHash,
   }));
+}
+
+/** Groups already time-sorted transactions into Today / Yesterday / dated buckets. */
+export function groupByDay(transactions: Transaction[]): TransactionGroup[] {
+  const groups: TransactionGroup[] = [];
+
+  for (const tx of transactions) {
+    const label = getDayLabel(tx.timestamp);
+    const current = groups[groups.length - 1];
+    if (current && current.label === label) {
+      current.transactions.push(tx);
+    } else {
+      groups.push({ label, transactions: [tx] });
+    }
+  }
+
+  return groups;
 }

@@ -2,7 +2,7 @@ import { Card } from "@/shared/ui/Card";
 import type { Token } from "@/entities/token";
 import type { GlobalStats } from "@/entities/market";
 import { formatCompactUsd, formatShare } from "@/shared/lib/format";
-import { MetricsBar, type MetricSegment } from "./MetricsBar";
+import { MetricsBar, type MetricSegment } from "@/shared/ui/MetricsBar";
 import { MoversList } from "./MoversList";
 import { TokenTable } from "./TokenTable";
 import styles from "./MarketOverview.module.css";
