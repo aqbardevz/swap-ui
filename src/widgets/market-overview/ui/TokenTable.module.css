@@ -40,7 +40,7 @@
 
 .row {
   display: grid;
-  grid-template-columns: 1.8fr 1fr 0.8fr 1fr 1fr;
+  grid-template-columns: 30px 1.8fr 1fr 0.8fr 1fr 1fr;
   align-items: center;
   gap: var(--space-3);
   padding: var(--space-3) var(--space-2);
@@ -49,12 +49,17 @@
   transition: background-color var(--transition-fast);
 }
 
-a.row:hover {
+.row:hover {
   background: var(--surface-hover);
 }
 
 .row:last-child {
   border-bottom: none;
+}
+
+.rowLink {
+  display: contents;
+  color: inherit;
 }
 
 .tableHead {
@@ -176,12 +181,12 @@ a.row:hover {
   }
 
   .row {
-    grid-template-columns: 1.8fr 1fr 0.8fr 1fr 1fr;
+    grid-template-columns: 30px 1.8fr 1fr 0.8fr 1fr 1fr;
   }
 }
 
 @media (max-width: 719px) {
   .row {
-    grid-template-columns: 1.8fr 1fr 0.8fr;
+    grid-template-columns: 30px 1.8fr 1fr 0.8fr;
   }
 }

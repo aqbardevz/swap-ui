@@ -1,9 +1,11 @@
 import { Card } from "@/shared/ui/Card";
 import type { Token } from "@/entities/token";
 import type { GlobalStats } from "@/entities/market";
+import { WatchlistProvider } from "@/features/watchlist";
 import { formatCompactUsd, formatShare } from "@/shared/lib/format";
 import { MetricsBar, type MetricSegment } from "@/shared/ui/MetricsBar";
 import { MoversList } from "./MoversList";
+import { WatchlistPanel } from "./WatchlistPanel";
 import { TokenTable } from "./TokenTable";
 import styles from "./MarketOverview.module.css";
 
@@ -35,18 +37,22 @@ export function MarketOverview({ tokens, global }: MarketOverviewProps) {
     .slice(0, 3);
 
   return (
-    <div className={styles.stack}>
-      <MetricsBar segments={segments} />
+    <WatchlistProvider>
+      <div className={styles.stack}>
+        <MetricsBar segments={segments} />
 
-      <div className={styles.moversGrid}>
-        <MoversList title="Top Gainers · 24h" tokens={gainers} tone="positive" />
-        <MoversList title="Top Losers · 24h" tokens={losers} tone="negative" />
+        <WatchlistPanel tokens={tokens} />
+
+        <div className={styles.moversGrid}>
+          <MoversList title="Top Gainers · 24h" tokens={gainers} tone="positive" />
+          <MoversList title="Top Losers · 24h" tokens={losers} tone="negative" />
+        </div>
+
+        <Card className={styles.tableCard}>
+          <h2 className={styles.tableTitle}>All Tokens</h2>
+          <TokenTable tokens={tokens} />
+        </Card>
       </div>
-
-      <Card className={styles.tableCard}>
-        <h2 className={styles.tableTitle}>All Tokens</h2>
-        <TokenTable tokens={tokens} />
-      </Card>
-    </div>
+    </WatchlistProvider>
   );
 }

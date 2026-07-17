@@ -1,0 +1,30 @@
+.button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  flex-shrink: 0;
+  border-radius: var(--radius-sm);
+  color: var(--text-tertiary);
+  transition:
+    color var(--transition-fast),
+    background-color var(--transition-fast);
+}
+
+.button:hover {
+  color: var(--text-primary);
+  background: var(--surface-hover);
+}
+
+.active {
+  color: var(--accent);
+}
+
+.active:hover {
+  color: var(--accent-hover);
+}
+
+.active .icon {
+  fill: currentColor;
+}

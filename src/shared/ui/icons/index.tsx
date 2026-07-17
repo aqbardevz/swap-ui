@@ -21,4 +21,5 @@ export {
   LuCalendar as CalendarIcon,
   LuMenu as MenuIcon,
   LuX as CloseIcon,
+  LuStar as StarIcon,
 } from "react-icons/lu";

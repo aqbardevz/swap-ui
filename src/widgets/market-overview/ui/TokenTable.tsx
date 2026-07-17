@@ -3,6 +3,7 @@
 import { useMemo, useState, type CSSProperties } from "react";
 import Link from "next/link";
 import { TokenIcon, type Token } from "@/entities/token";
+import { WatchlistButton } from "@/features/watchlist";
 import { formatCompactUsd, formatPercent, formatUsd } from "@/shared/lib/format";
 import { ChevronDownIcon, SearchIcon } from "@/shared/ui/icons";
 import { cn } from "@/shared/lib/cn";
@@ -68,6 +69,7 @@ export function TokenTable({ tokens }: { tokens: Token[] }) {
 
       <div className={styles.tableWrap}>
         <div className={cn(styles.row, styles.tableHead)}>
+          <span aria-hidden="true" />
           {COLUMNS.map((column) => (
             <button
               key={column.key}
@@ -94,27 +96,30 @@ export function TokenTable({ tokens }: { tokens: Token[] }) {
         {rows.map((token) => {
           const positive = token.change24h >= 0;
           return (
-            <Link key={token.symbol} href={`/market/${token.symbol.toLowerCase()}`} className={styles.row}>
-              <span className={styles.tokenCell}>
-                <span className={styles.rank}>{token.marketCapRank ?? "—"}</span>
-                <TokenIcon token={token} size={30} />
-                <span className={styles.tokenText}>
-                  <span className={styles.tokenSymbol}>{token.symbol}</span>
-                  <span className={styles.tokenName}>{token.name}</span>
+            <div key={token.symbol} className={styles.row}>
+              <WatchlistButton symbol={token.symbol} />
+              <Link href={`/market/${token.symbol.toLowerCase()}`} className={styles.rowLink}>
+                <span className={styles.tokenCell}>
+                  <span className={styles.rank}>{token.marketCapRank ?? "—"}</span>
+                  <TokenIcon token={token} size={30} />
+                  <span className={styles.tokenText}>
+                    <span className={styles.tokenSymbol}>{token.symbol}</span>
+                    <span className={styles.tokenName}>{token.name}</span>
+                  </span>
                 </span>
-              </span>
-              <span className={styles.price}>{formatUsd(token.price)}</span>
-              <span
-                className={cn(styles.change, positive ? styles.up : styles.down)}
-                style={{ "--heat": getHeat(token.change24h) } as CSSProperties}
-              >
-                {formatPercent(token.change24h)}
-              </span>
-              <span className={cn(styles.volume, styles.hideSmall)}>{formatCompactUsd(token.volume24h)}</span>
-              <span className={styles.hideSmall}>
-                <Sparkline values={token.sparkline} positive={positive} />
-              </span>
-            </Link>
+                <span className={styles.price}>{formatUsd(token.price)}</span>
+                <span
+                  className={cn(styles.change, positive ? styles.up : styles.down)}
+                  style={{ "--heat": getHeat(token.change24h) } as CSSProperties}
+                >
+                  {formatPercent(token.change24h)}
+                </span>
+                <span className={cn(styles.volume, styles.hideSmall)}>{formatCompactUsd(token.volume24h)}</span>
+                <span className={styles.hideSmall}>
+                  <Sparkline values={token.sparkline} positive={positive} />
+                </span>
+              </Link>
+            </div>
           );
         })}
       </div>

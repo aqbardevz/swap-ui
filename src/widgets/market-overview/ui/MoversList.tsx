@@ -1,8 +1,6 @@
-import Link from "next/link";
 import { Card } from "@/shared/ui/Card";
-import { TokenIcon, type Token } from "@/entities/token";
-import { formatPercent, formatUsd } from "@/shared/lib/format";
-import { cn } from "@/shared/lib/cn";
+import type { Token } from "@/entities/token";
+import { TokenMiniRow } from "./TokenMiniRow";
 import styles from "./MoversList.module.css";
 
 interface MoversListProps {
@@ -21,18 +19,7 @@ export function MoversList({ title, tokens, tone }: MoversListProps) {
       ) : (
         <div className={styles.list}>
           {tokens.map((token) => (
-            <Link key={token.symbol} href={`/market/${token.symbol.toLowerCase()}`} className={styles.row}>
-              <span className={styles.tokenCell}>
-                <TokenIcon token={token} size={26} />
-                <span className={styles.symbol}>{token.symbol}</span>
-              </span>
-              <span className={styles.priceCell}>
-                <span className={styles.price}>{formatUsd(token.price)}</span>
-                <span className={cn(styles.change, tone === "positive" ? styles.up : styles.down)}>
-                  {formatPercent(token.change24h)}
-                </span>
-              </span>
-            </Link>
+            <TokenMiniRow key={token.symbol} token={token} positive={tone === "positive"} />
           ))}
         </div>
       )}
