@@ -1,3 +1,16 @@
+.wrap {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  padding-inline: var(--space-4);
+}
+
+.col {
+  width: 100%;
+  max-width: 460px;
+}
+
 .card {
   padding: var(--space-5);
   display: flex;

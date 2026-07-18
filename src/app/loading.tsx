@@ -1,11 +1,10 @@
 import { Skeleton } from "@/shared/ui/Skeleton";
-import pageStyles from "./page.module.css";
 import styles from "./loading.module.css";
 
 export default function Loading() {
   return (
-    <main className={`container ${pageStyles.wrap}`}>
-      <div className={pageStyles.col}>
+    <main className={styles.wrap}>
+      <div className={styles.col}>
         <div className={styles.card}>
           <div className={styles.header}>
             <Skeleton width={64} height={24} />

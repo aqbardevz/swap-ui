@@ -1,0 +1,12 @@
+.hero {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  padding-inline: var(--space-4);
+}
+
+.inner {
+  width: 100%;
+  max-width: 460px;
+}
