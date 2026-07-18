@@ -2,6 +2,7 @@
 
 import { useCallback, useMemo, useState } from "react";
 import type { Token } from "@/entities/token";
+import { sanitizeDecimalInput } from "@/shared/lib/decimalInput";
 
 export function useSwapForm(tokens: Token[], initialSellSymbol?: string) {
   const defaultSell = initialSellSymbol
@@ -22,9 +23,7 @@ export function useSwapForm(tokens: Token[], initialSellSymbol?: string) {
   }, [sellAmount, buyToken, rate]);
 
   const setSellAmount = useCallback((value: string) => {
-    if (value === "" || /^\d*\.?\d*$/.test(value)) {
-      setSellAmountState(value);
-    }
+    setSellAmountState((previous) => sanitizeDecimalInput(value, previous));
   }, []);
 
   const setSellToken = useCallback(
@@ -51,12 +50,12 @@ export function useSwapForm(tokens: Token[], initialSellSymbol?: string) {
     if (!buyToken) return;
     setSellTokenState(buyToken);
     setBuyTokenState(sellToken);
-    setSellAmountState(buyAmount || "");
-  }, [buyToken, sellToken, buyAmount]);
+    setSellAmount(buyAmount || "");
+  }, [buyToken, sellToken, buyAmount, setSellAmount]);
 
   const setMax = useCallback(() => {
-    setSellAmountState(String(sellToken.balance));
-  }, [sellToken]);
+    setSellAmount(String(sellToken.balance));
+  }, [sellToken, setSellAmount]);
 
   return {
     tokens,
