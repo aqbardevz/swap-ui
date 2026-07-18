@@ -1,12 +1,22 @@
 .hero {
+  position: relative;
   display: flex;
   align-items: center;
   justify-content: center;
   height: 100vh;
   padding-inline: var(--space-4);
+  overflow: hidden;
+}
+
+.background {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
 }
 
 .inner {
+  position: relative;
+  z-index: 1;
   width: 100%;
   max-width: 460px;
 }
