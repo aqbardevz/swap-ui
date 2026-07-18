@@ -7,7 +7,8 @@
 }
 
 .inner {
-  display: flex;
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
   align-items: center;
   gap: var(--space-6);
   height: 72px;
@@ -15,27 +16,18 @@
 
 .brand {
   display: flex;
+  justify-self: center;
   align-items: center;
   gap: var(--space-2);
   font-weight: 700;
-  font-size: var(--fs-lg);
+  font-size: 24px;
   color: var(--text-primary);
   white-space: nowrap;
 }
 
-.logo {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 32px;
-  height: 32px;
-  border-radius: var(--radius-sm);
-  background: linear-gradient(135deg, var(--accent), var(--accent-hover));
-  color: var(--accent-contrast);
-}
-
 .nav {
   display: flex;
+  justify-self: start;
   align-items: center;
   gap: var(--space-2);
 }
@@ -43,7 +35,7 @@
 .navItem,
 .navItemActive {
   padding: var(--space-2) var(--space-3);
-  border-radius: var(--radius-sm);
+  border-radius: var(--radius-lg);
   font-size: var(--fs-md);
   font-weight: 500;
   transition:
@@ -67,9 +59,9 @@
 
 .actions {
   display: flex;
+  justify-self: end;
   align-items: center;
   gap: var(--space-3);
-  margin-left: auto;
 }
 
 .menuButton {

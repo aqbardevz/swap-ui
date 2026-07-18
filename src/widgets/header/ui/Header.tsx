@@ -26,10 +26,6 @@ export function Header() {
   return (
     <header className={styles.header}>
       <div className={`container ${styles.inner}`}>
-        <Link href="/" className={styles.brand}>
-          Swwwapz.
-        </Link>
-
         <nav className={styles.nav}>
           {NAV_ITEMS.map((item) => (
             <Link
@@ -45,6 +41,10 @@ export function Header() {
             </Link>
           ))}
         </nav>
+
+        <Link href="/" className={styles.brand}>
+          Swwwapz.
+        </Link>
 
         <div className={styles.actions}>
           <PreferencesMenu />
