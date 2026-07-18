@@ -13,11 +13,11 @@
   transition: border-color var(--transition-fast);
 }
 
-.panel:first-child {
+.panelTop {
   border-radius: var(--radius-md) var(--radius-md) var(--space-1) var(--space-1);
 }
 
-.panel:last-child {
+.panelBottom {
   border-radius: var(--space-1) var(--space-1) var(--radius-md) var(--radius-md);
 }
 
@@ -68,6 +68,10 @@
   font-weight: 600;
   color: var(--text-primary);
   font-family: var(--font-mono);
+}
+
+.input:focus-visible {
+  outline: none;
 }
 
 .input::placeholder {

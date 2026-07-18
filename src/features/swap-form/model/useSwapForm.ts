@@ -7,20 +7,19 @@ export function useSwapForm(tokens: Token[], initialSellSymbol?: string) {
   const defaultSell = initialSellSymbol
     ? (tokens.find((token) => token.symbol.toLowerCase() === initialSellSymbol.toLowerCase()) ?? tokens[0])
     : tokens[0];
-  const defaultBuy = tokens.find((token) => token.symbol !== defaultSell.symbol) ?? tokens[1];
 
   const [sellToken, setSellTokenState] = useState<Token>(defaultSell);
-  const [buyToken, setBuyTokenState] = useState<Token>(defaultBuy);
-  const [sellAmount, setSellAmountState] = useState("1");
+  const [buyToken, setBuyTokenState] = useState<Token | null>(null);
+  const [sellAmount, setSellAmountState] = useState("");
   const [slippage, setSlippage] = useState(0.5);
 
-  const rate = buyToken.price > 0 ? sellToken.price / buyToken.price : 0;
+  const rate = buyToken && buyToken.price > 0 ? sellToken.price / buyToken.price : 0;
 
   const buyAmount = useMemo(() => {
     const parsed = Number(sellAmount);
-    if (!sellAmount || Number.isNaN(parsed)) return "";
+    if (!sellAmount || !buyToken || Number.isNaN(parsed)) return "";
     return (parsed * rate).toFixed(6).replace(/\.?0+$/, "");
-  }, [sellAmount, rate]);
+  }, [sellAmount, buyToken, rate]);
 
   const setSellAmount = useCallback((value: string) => {
     if (value === "" || /^\d*\.?\d*$/.test(value)) {
@@ -30,7 +29,7 @@ export function useSwapForm(tokens: Token[], initialSellSymbol?: string) {
 
   const setSellToken = useCallback(
     (token: Token) => {
-      if (token.symbol === buyToken.symbol) {
+      if (buyToken && token.symbol === buyToken.symbol) {
         setBuyTokenState(sellToken);
       }
       setSellTokenState(token);
@@ -41,7 +40,7 @@ export function useSwapForm(tokens: Token[], initialSellSymbol?: string) {
   const setBuyToken = useCallback(
     (token: Token) => {
       if (token.symbol === sellToken.symbol) {
-        setSellTokenState(buyToken);
+        setSellTokenState(buyToken ?? sellToken);
       }
       setBuyTokenState(token);
     },
@@ -49,6 +48,7 @@ export function useSwapForm(tokens: Token[], initialSellSymbol?: string) {
   );
 
   const flip = useCallback(() => {
+    if (!buyToken) return;
     setSellTokenState(buyToken);
     setBuyTokenState(sellToken);
     setSellAmountState(buyAmount || "");

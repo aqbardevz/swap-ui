@@ -4,6 +4,7 @@ import { TokenSelect } from "@/features/token-select";
 import { IconButton } from "@/shared/ui/IconButton";
 import { CgArrowsExchangeAltV } from "react-icons/cg";
 import { formatAmount, formatUsd } from "@/shared/lib/format";
+import { useWallet } from "@/features/wallet-connect";
 import { useSwapForm } from "../model/useSwapForm";
 import styles from "./SwapForm.module.css";
 
@@ -21,18 +22,21 @@ export function SwapForm({ form }: { form: ReturnType<typeof useSwapForm> }) {
     flip,
     setMax,
   } = form;
+  const { isConnected } = useWallet();
 
   return (
     <div className={styles.stack}>
-      <div className={styles.panel}>
+      <div className={`${styles.panel} ${styles.panelTop}`}>
         <div className={styles.panelHeader}>
           <span>Sell</span>
-          <span className={styles.balance}>
-            Balance: {formatAmount(sellToken.balance, 4)}
-            <button type="button" className={styles.maxButton} onClick={setMax}>
-              MAX
-            </button>
-          </span>
+          {isConnected && (
+            <span className={styles.balance}>
+              Balance: {formatAmount(sellToken.balance, 4)}
+              <button type="button" className={styles.maxButton} onClick={setMax}>
+                MAX
+              </button>
+            </span>
+          )}
         </div>
         <div className={styles.panelBody}>
           <input
@@ -65,12 +69,12 @@ export function SwapForm({ form }: { form: ReturnType<typeof useSwapForm> }) {
         </IconButton>
       </div>
 
-      <div className={styles.panel}>
+      <div className={`${styles.panel} ${styles.panelBottom}`}>
         <div className={styles.panelHeader}>
           <span>Buy</span>
-          <span className={styles.balance}>
-            Balance: {formatAmount(buyToken.balance, 4)}
-          </span>
+          {isConnected && buyToken && (
+            <span className={styles.balance}>Balance: {formatAmount(buyToken.balance, 4)}</span>
+          )}
         </div>
         <div className={styles.panelBody}>
           <input
@@ -87,15 +91,17 @@ export function SwapForm({ form }: { form: ReturnType<typeof useSwapForm> }) {
           />
         </div>
         <div className={styles.usdValue}>
-          {formatUsd(Number(buyAmount || 0) * buyToken.price)}
+          {formatUsd(Number(buyAmount || 0) * (buyToken?.price ?? 0))}
         </div>
       </div>
 
-      <div className={styles.rateRow}>
-        <span>
-          1 {sellToken.symbol} = {formatAmount(rate, 6)} {buyToken.symbol}
-        </span>
-      </div>
+      {buyToken && (
+        <div className={styles.rateRow}>
+          <span>
+            1 {sellToken.symbol} = {formatAmount(rate, 6)} {buyToken.symbol}
+          </span>
+        </div>
+      )}
     </div>
   );
 }

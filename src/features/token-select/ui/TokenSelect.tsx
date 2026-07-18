@@ -10,7 +10,7 @@ import styles from "./TokenSelect.module.css";
 
 interface TokenSelectProps {
   tokens: Token[];
-  selected: Token;
+  selected: Token | null;
   onChange: (token: Token) => void;
 }
 
@@ -27,12 +27,18 @@ export function TokenSelect({ tokens, selected, onChange }: TokenSelectProps) {
     <div className={styles.wrapper} onBlur={handleBlur}>
       <button
         type="button"
-        className={styles.trigger}
+        className={cn(styles.trigger, !selected && styles.triggerPlaceholder)}
         onClick={() => setOpen((value) => !value)}
         aria-expanded={open}
       >
-        <TokenIcon token={selected} size={24} />
-        <span className={styles.symbol}>{selected.symbol}</span>
+        {selected ? (
+          <>
+            <TokenIcon token={selected} size={24} />
+            <span className={styles.symbol}>{selected.symbol}</span>
+          </>
+        ) : (
+          <span className={styles.symbol}>Select token</span>
+        )}
         <ChevronDownIcon size={16} className={cn(styles.chevron, open && styles.chevronOpen)} />
       </button>
 
@@ -43,8 +49,8 @@ export function TokenSelect({ tokens, selected, onChange }: TokenSelectProps) {
               key={token.symbol}
               type="button"
               role="option"
-              aria-selected={token.symbol === selected.symbol}
-              className={cn(styles.option, token.symbol === selected.symbol && styles.optionActive)}
+              aria-selected={token.symbol === selected?.symbol}
+              className={cn(styles.option, token.symbol === selected?.symbol && styles.optionActive)}
               onClick={() => {
                 onChange(token);
                 setOpen(false);

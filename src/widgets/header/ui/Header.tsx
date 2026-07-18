@@ -27,18 +27,7 @@ export function Header() {
     <header className={styles.header}>
       <div className={`container ${styles.inner}`}>
         <Link href="/" className={styles.brand}>
-          <span className={styles.logo}>
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
-              <path
-                d="M4 8h13l-3.5-3.5M20 16H7l3.5 3.5"
-                stroke="currentColor"
-                strokeWidth="2.4"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              />
-            </svg>
-          </span>
-          Nova Swap
+          Swwwapz.
         </Link>
 
         <nav className={styles.nav}>
@@ -46,7 +35,11 @@ export function Header() {
             <Link
               key={item.href}
               href={item.href}
-              className={isActive(pathname, item.href) ? styles.navItemActive : styles.navItem}
+              className={
+                isActive(pathname, item.href)
+                  ? styles.navItemActive
+                  : styles.navItem
+              }
             >
               {item.label}
             </Link>
@@ -73,7 +66,11 @@ export function Header() {
             <Link
               key={item.href}
               href={item.href}
-              className={isActive(pathname, item.href) ? styles.mobileNavItemActive : styles.mobileNavItem}
+              className={
+                isActive(pathname, item.href)
+                  ? styles.mobileNavItemActive
+                  : styles.mobileNavItem
+              }
               onClick={() => setMobileOpen(false)}
             >
               {item.label}

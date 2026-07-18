@@ -21,6 +21,17 @@
   background: var(--surface-hover);
 }
 
+.triggerPlaceholder {
+  padding-left: var(--space-3);
+  background: var(--accent);
+  border-color: transparent;
+  color: var(--accent-contrast);
+}
+
+.triggerPlaceholder:hover {
+  background: var(--accent-hover);
+}
+
 .symbol {
   white-space: nowrap;
 }
