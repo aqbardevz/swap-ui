@@ -28,6 +28,13 @@ export function formatAmount(value: number, maxDigits = 6): string {
   }).format(value);
 }
 
+/** Splits a formatted amount ("12,345.67") into its integer and decimal parts for typographic emphasis. */
+export function splitAmountParts(formatted: string): { integer: string; decimal: string } {
+  const dotIndex = formatted.indexOf(".");
+  if (dotIndex === -1) return { integer: formatted, decimal: "" };
+  return { integer: formatted.slice(0, dotIndex), decimal: formatted.slice(dotIndex) };
+}
+
 export function formatPercent(value: number): string {
   const sign = value > 0 ? "+" : "";
   return `${sign}${value.toFixed(2)}%`;

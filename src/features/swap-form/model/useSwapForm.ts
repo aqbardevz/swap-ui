@@ -2,6 +2,7 @@
 
 import { useCallback, useMemo, useState } from "react";
 import type { Token } from "@/entities/token";
+import { NETWORKS, type Network } from "@/entities/network";
 import { sanitizeDecimalInput } from "@/shared/lib/decimalInput";
 
 const SLIPPAGE = 0.5;
@@ -14,6 +15,8 @@ export function useSwapForm(tokens: Token[], initialSellSymbol?: string) {
   const [sellToken, setSellTokenState] = useState<Token>(defaultSell);
   const [buyToken, setBuyTokenState] = useState<Token | null>(null);
   const [sellAmount, setSellAmountState] = useState("");
+  const [sellNetwork, setSellNetwork] = useState<Network>(NETWORKS[0]);
+  const [buyNetwork, setBuyNetwork] = useState<Network>(NETWORKS[1]);
 
   const rate = buyToken && buyToken.price > 0 ? sellToken.price / buyToken.price : 0;
 
@@ -52,7 +55,9 @@ export function useSwapForm(tokens: Token[], initialSellSymbol?: string) {
     setSellTokenState(buyToken);
     setBuyTokenState(sellToken);
     setSellAmount(buyAmount || "");
-  }, [buyToken, sellToken, buyAmount, setSellAmount]);
+    setSellNetwork(buyNetwork);
+    setBuyNetwork(sellNetwork);
+  }, [buyToken, sellToken, buyAmount, setSellAmount, sellNetwork, buyNetwork]);
 
   const setMax = useCallback(() => {
     setSellAmount(String(sellToken.balance));
@@ -66,9 +71,13 @@ export function useSwapForm(tokens: Token[], initialSellSymbol?: string) {
     buyAmount,
     rate,
     slippage: SLIPPAGE,
+    sellNetwork,
+    buyNetwork,
     setSellToken,
     setBuyToken,
     setSellAmount,
+    setSellNetwork,
+    setBuyNetwork,
     flip,
     setMax,
   };

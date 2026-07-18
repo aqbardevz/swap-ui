@@ -1,9 +1,10 @@
 "use client";
 
 import { TokenSelect } from "@/features/token-select";
+import { NetworkSelect } from "@/features/network-select";
 import { IconButton } from "@/shared/ui/IconButton";
-import { CgArrowsExchangeAltV } from "react-icons/cg";
-import { formatAmount, formatUsd } from "@/shared/lib/format";
+import { CgArrowsExchangeAlt } from "react-icons/cg";
+import { formatAmount, formatUsd, splitAmountParts } from "@/shared/lib/format";
 import { useWallet } from "@/features/wallet-connect";
 import { useSwapForm } from "../model/useSwapForm";
 import styles from "./SwapForm.module.css";
@@ -16,45 +17,53 @@ export function SwapForm({ form }: { form: ReturnType<typeof useSwapForm> }) {
     sellAmount,
     buyAmount,
     rate,
+    sellNetwork,
+    buyNetwork,
     setSellToken,
     setBuyToken,
     setSellAmount,
+    setSellNetwork,
+    setBuyNetwork,
     flip,
     setMax,
   } = form;
   const { isConnected } = useWallet();
 
+  const buyAmountParts = splitAmountParts(
+    buyAmount ? formatAmount(Number(buyAmount), 6) : "",
+  );
+
   return (
-    <div className={styles.stack}>
-      <div className={`${styles.panel} ${styles.panelTop}`}>
-        <div className={styles.panelHeader}>
-          <span>Sell</span>
-          {isConnected && (
-            <span className={styles.balance}>
-              Balance: {formatAmount(sellToken.balance, 4)}
-              <button type="button" className={styles.maxButton} onClick={setMax}>
-                MAX
-              </button>
-            </span>
-          )}
+    <div className={styles.grid}>
+      <div className={`${styles.pickerCard} ${styles.pickerSell}`}>
+        <div className={styles.pickerLabels}>
+          <span>Token</span>
+          <span>Network</span>
         </div>
-        <div className={styles.panelBody}>
-          <input
-            className={styles.input}
-            value={sellAmount}
-            onChange={(event) => setSellAmount(event.target.value)}
-            placeholder="0"
-            inputMode="decimal"
-            autoComplete="off"
-          />
+        <div className={styles.pickerRow}>
           <TokenSelect
             tokens={tokens}
             selected={sellToken}
             onChange={setSellToken}
           />
+          <span className={styles.slash}>/</span>
+          <NetworkSelect selected={sellNetwork} onChange={setSellNetwork} />
         </div>
-        <div className={styles.usdValue}>
-          {formatUsd(Number(sellAmount || 0) * sellToken.price)}
+      </div>
+
+      <div className={`${styles.pickerCard} ${styles.pickerBuy}`}>
+        <div className={styles.pickerLabels}>
+          <span>Token</span>
+          <span>Network</span>
+        </div>
+        <div className={styles.pickerRow}>
+          <TokenSelect
+            tokens={tokens}
+            selected={buyToken}
+            onChange={setBuyToken}
+          />
+          <span className={styles.slash}>/</span>
+          <NetworkSelect selected={buyNetwork} onChange={setBuyNetwork} />
         </div>
       </div>
 
@@ -65,33 +74,62 @@ export function SwapForm({ form }: { form: ReturnType<typeof useSwapForm> }) {
           aria-label="Flip tokens"
           onClick={flip}
         >
-          <CgArrowsExchangeAltV size={18} />
+          <CgArrowsExchangeAlt size={18} />
         </IconButton>
       </div>
 
-      <div className={`${styles.panel} ${styles.panelBottom}`}>
-        <div className={styles.panelHeader}>
-          <span>Buy</span>
-          {isConnected && buyToken && (
-            <span className={styles.balance}>Balance: {formatAmount(buyToken.balance, 4)}</span>
+      <div className={`${styles.amountCard} ${styles.amountSell}`}>
+        <div className={styles.amountHeader}>
+          <span>You send:</span>
+          {isConnected && (
+            <span className={styles.balance}>
+              Available: {formatAmount(sellToken.balance, 4)}
+              <button
+                type="button"
+                className={styles.maxButton}
+                onClick={setMax}
+              >
+                MAX
+              </button>
+            </span>
           )}
         </div>
-        <div className={styles.panelBody}>
-          <input
-            className={styles.input}
-            value={buyAmount}
-            readOnly
-            placeholder="0"
-            tabIndex={-1}
-          />
-          <TokenSelect
-            tokens={tokens}
-            selected={buyToken}
-            onChange={setBuyToken}
-          />
+        <input
+          className={styles.input}
+          value={sellAmount}
+          onChange={(event) => setSellAmount(event.target.value)}
+          placeholder="0"
+          inputMode="decimal"
+          autoComplete="off"
+        />
+        <div className={styles.usdValue}>
+          ≈ {formatUsd(Number(sellAmount || 0) * sellToken.price)}
+        </div>
+      </div>
+
+      <div className={`${styles.amountCard} ${styles.amountBuy}`}>
+        <div className={styles.amountHeader}>
+          <span>You receive:</span>
+          {isConnected && buyToken && (
+            <span className={styles.balance}>
+              Balance: {formatAmount(buyToken.balance, 4)}
+            </span>
+          )}
+        </div>
+        <div className={styles.amountDisplay} data-placeholder={!buyAmount}>
+          {buyAmount ? (
+            <>
+              <span>{buyAmountParts.integer}</span>
+              <span className={styles.amountDecimal}>
+                {buyAmountParts.decimal}
+              </span>
+            </>
+          ) : (
+            "0"
+          )}
         </div>
         <div className={styles.usdValue}>
-          {formatUsd(Number(buyAmount || 0) * (buyToken?.price ?? 0))}
+          ≈ {formatUsd(Number(buyAmount || 0) * (buyToken?.price ?? 0))}
         </div>
       </div>
 

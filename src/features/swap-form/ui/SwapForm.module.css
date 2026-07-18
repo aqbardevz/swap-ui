@@ -1,47 +1,111 @@
-.stack {
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
+.grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-areas:
+    "pSell pBuy"
+    "flip flip"
+    "aSell aBuy";
+  align-items: stretch;
+  column-gap: var(--space-2);
+  row-gap: 0;
   min-width: 0;
 }
 
-.panel {
+.pickerCard {
+  min-width: 0;
+  padding: var(--space-3) var(--space-4);
+  background: var(--surface-secondary);
+  border-radius: var(--radius-md);
+}
+
+.pickerSell {
+  grid-area: pSell;
+}
+
+.pickerBuy {
+  grid-area: pBuy;
+}
+
+.pickerLabels {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-2);
+  font-size: var(--fs-xs);
+  color: var(--text-tertiary);
+  margin-bottom: var(--space-2);
+}
+
+.pickerRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-2);
+  min-width: 0;
+}
+
+.slash {
+  flex-shrink: 0;
+  color: var(--text-tertiary);
+}
+
+.flipRow {
+  grid-area: flip;
+  position: relative;
+  height: 0;
+  margin-block: calc(var(--space-2) / 2);
+  z-index: 2;
+}
+
+.flipButton {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  border: 4px solid var(--surface);
+  background: var(--accent);
+}
+
+.amountCard {
   min-width: 0;
   padding: var(--space-4);
   background: var(--surface-secondary);
   border: 1px solid transparent;
+  border-radius: var(--radius-md);
   transition: border-color var(--transition-fast);
 }
 
-.panelTop {
-  border-radius: var(--radius-md) var(--radius-md) var(--space-1) var(--space-1);
+.amountSell {
+  grid-area: aSell;
 }
 
-.panelBottom {
-  border-radius: var(--space-1) var(--space-1) var(--radius-md) var(--radius-md);
+.amountBuy {
+  grid-area: aBuy;
 }
 
-.panel:focus-within {
+.amountCard:focus-within {
   border-color: var(--accent);
 }
 
-.panelHeader {
+.amountHeader {
   display: flex;
   align-items: center;
   justify-content: space-between;
+  gap: var(--space-2);
   font-size: var(--fs-xs);
   color: var(--text-tertiary);
-  margin-bottom: var(--space-2);
+  margin-bottom: var(--space-3);
 }
 
 .balance {
   display: inline-flex;
   align-items: center;
   gap: var(--space-1);
+  white-space: nowrap;
 }
 
 .maxButton {
-  color: var(--accent);
+  color: var(--warning);
   font-weight: 700;
   font-size: var(--fs-xs);
   padding: 2px 6px;
@@ -49,23 +113,14 @@
 }
 
 .maxButton:hover {
-  background: var(--accent-soft);
-}
-
-.panelBody {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: var(--space-3);
-  min-width: 0;
+  background: var(--warning-soft);
 }
 
 .input {
   min-width: 0;
   width: 100%;
-  flex: 1;
   font-size: var(--fs-2xl);
-  font-weight: 600;
+  font-weight: 700;
   color: var(--text-primary);
   font-family: var(--font-mono);
 }
@@ -78,31 +133,58 @@
   color: var(--text-tertiary);
 }
 
+.amountDisplay {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: var(--fs-2xl);
+  font-weight: 700;
+  color: var(--text-primary);
+  font-family: var(--font-mono);
+}
+
+.amountDisplay[data-placeholder="true"] {
+  color: var(--text-tertiary);
+}
+
+.amountDecimal {
+  color: var(--text-tertiary);
+}
+
 .usdValue {
-  margin-top: var(--space-1);
+  margin-top: var(--space-2);
+  text-align: right;
   font-size: var(--fs-xs);
   color: var(--text-tertiary);
 }
 
-.flipRow {
-  display: flex;
-  justify-content: center;
-  height: 0;
-  position: relative;
-  z-index: 2;
-}
-
-.flipButton {
-  margin-top: -19px;
-  border: 4px solid var(--surface);
-  background: var(--accent);
-}
-
 .rateRow {
+  grid-column: 1 / -1;
   display: flex;
   justify-content: space-between;
   margin-top: var(--space-3);
   padding: 0 var(--space-1);
   font-size: var(--fs-sm);
   color: var(--text-secondary);
+}
+
+@media (max-width: 640px) {
+  .grid {
+    grid-template-columns: 1fr;
+    grid-template-areas:
+      "pSell"
+      "aSell"
+      "flip"
+      "pBuy"
+      "aBuy";
+  }
+
+  .pickerCard {
+    margin-bottom: var(--space-2);
+  }
+
+  .flipButton {
+    transform: translate(-50%, -50%) rotate(90deg);
+  }
 }
