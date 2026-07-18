@@ -3,7 +3,7 @@
 import { useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { ThemeToggle } from "@/features/theme-toggle";
+import { PreferencesMenu } from "@/features/preferences-menu";
 import { WalletConnectButton } from "@/features/wallet-connect";
 import { IconButton } from "@/shared/ui/IconButton";
 import { CloseIcon, MenuIcon } from "@/shared/ui/icons";
@@ -47,7 +47,7 @@ export function Header() {
         </nav>
 
         <div className={styles.actions}>
-          <ThemeToggle />
+          <PreferencesMenu />
           <WalletConnectButton />
           <IconButton
             className={styles.menuButton}

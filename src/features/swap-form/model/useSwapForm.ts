@@ -4,6 +4,8 @@ import { useCallback, useMemo, useState } from "react";
 import type { Token } from "@/entities/token";
 import { sanitizeDecimalInput } from "@/shared/lib/decimalInput";
 
+const SLIPPAGE = 0.5;
+
 export function useSwapForm(tokens: Token[], initialSellSymbol?: string) {
   const defaultSell = initialSellSymbol
     ? (tokens.find((token) => token.symbol.toLowerCase() === initialSellSymbol.toLowerCase()) ?? tokens[0])
@@ -12,7 +14,6 @@ export function useSwapForm(tokens: Token[], initialSellSymbol?: string) {
   const [sellToken, setSellTokenState] = useState<Token>(defaultSell);
   const [buyToken, setBuyTokenState] = useState<Token | null>(null);
   const [sellAmount, setSellAmountState] = useState("");
-  const [slippage, setSlippage] = useState(0.5);
 
   const rate = buyToken && buyToken.price > 0 ? sellToken.price / buyToken.price : 0;
 
@@ -64,11 +65,10 @@ export function useSwapForm(tokens: Token[], initialSellSymbol?: string) {
     sellAmount,
     buyAmount,
     rate,
-    slippage,
+    slippage: SLIPPAGE,
     setSellToken,
     setBuyToken,
     setSellAmount,
-    setSlippage,
     flip,
     setMax,
   };

@@ -1,11 +1,12 @@
 "use client";
 
-import { useState, type FocusEvent } from "react";
+import { useState } from "react";
 import type { Token } from "@/entities/token";
 import { TokenIcon } from "@/entities/token";
 import { formatAmount } from "@/shared/lib/format";
 import { ChevronDownIcon } from "@/shared/ui/icons";
 import { cn } from "@/shared/lib/cn";
+import { useClickOutside } from "@/shared/lib/useClickOutside";
 import styles from "./TokenSelect.module.css";
 
 interface TokenSelectProps {
@@ -16,15 +17,10 @@ interface TokenSelectProps {
 
 export function TokenSelect({ tokens, selected, onChange }: TokenSelectProps) {
   const [open, setOpen] = useState(false);
-
-  function handleBlur(event: FocusEvent<HTMLDivElement>) {
-    if (!event.currentTarget.contains(event.relatedTarget as Node)) {
-      setOpen(false);
-    }
-  }
+  const ref = useClickOutside<HTMLDivElement>(() => setOpen(false));
 
   return (
-    <div className={styles.wrapper} onBlur={handleBlur}>
+    <div className={styles.wrapper} ref={ref}>
       <button
         type="button"
         className={cn(styles.trigger, !selected && styles.triggerPlaceholder)}

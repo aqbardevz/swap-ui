@@ -22,4 +22,6 @@ export {
   LuMenu as MenuIcon,
   LuX as CloseIcon,
   LuStar as StarIcon,
+  LuEllipsis as MoreIcon,
+  LuMonitor as MonitorIcon,
 } from "react-icons/lu";

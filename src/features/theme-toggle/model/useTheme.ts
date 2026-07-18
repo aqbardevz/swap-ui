@@ -1,8 +1,20 @@
 "use client";
 
-import { useCallback, useSyncExternalStore } from "react";
+import { useCallback, useEffect, useState, useSyncExternalStore } from "react";
 
-export type Theme = "light" | "dark";
+export type ThemePreference = "light" | "dark" | "auto";
+type ResolvedTheme = "light" | "dark";
+
+const STORAGE_KEY = "theme";
+
+function getSystemTheme(): ResolvedTheme {
+  return window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+}
+
+function applyTheme(preference: ThemePreference) {
+  const resolved = preference === "auto" ? getSystemTheme() : preference;
+  document.documentElement.setAttribute("data-theme", resolved);
+}
 
 function subscribe(callback: () => void) {
   const observer = new MutationObserver(callback);
@@ -10,25 +22,41 @@ function subscribe(callback: () => void) {
   return () => observer.disconnect();
 }
 
-function getSnapshot(): Theme {
+function getResolvedTheme(): ResolvedTheme {
   return document.documentElement.getAttribute("data-theme") === "dark" ? "dark" : "light";
 }
 
-function getServerSnapshot(): Theme {
+function getServerResolvedTheme(): ResolvedTheme {
   return "light";
 }
 
-export function useTheme() {
-  const theme = useSyncExternalStore(subscribe, getSnapshot, getServerSnapshot);
+function getStoredPreference(): ThemePreference {
+  if (typeof window === "undefined") return "auto";
+  const stored = window.localStorage.getItem(STORAGE_KEY);
+  return stored === "light" || stored === "dark" ? stored : "auto";
+}
 
-  const setTheme = useCallback((next: Theme) => {
-    document.documentElement.setAttribute("data-theme", next);
-    window.localStorage.setItem("theme", next);
+export function useTheme() {
+  const theme = useSyncExternalStore(subscribe, getResolvedTheme, getServerResolvedTheme);
+  const [preference, setPreference] = useState<ThemePreference>(getStoredPreference);
+
+  useEffect(() => {
+    if (preference !== "auto") return;
+    const media = window.matchMedia("(prefers-color-scheme: dark)");
+    const handleChange = () => applyTheme("auto");
+    media.addEventListener("change", handleChange);
+    return () => media.removeEventListener("change", handleChange);
+  }, [preference]);
+
+  const setTheme = useCallback((next: ThemePreference) => {
+    if (next === "auto") {
+      window.localStorage.removeItem(STORAGE_KEY);
+    } else {
+      window.localStorage.setItem(STORAGE_KEY, next);
+    }
+    setPreference(next);
+    applyTheme(next);
   }, []);
 
-  const toggleTheme = useCallback(() => {
-    setTheme(theme === "dark" ? "light" : "dark");
-  }, [theme, setTheme]);
-
-  return { theme, toggleTheme };
+  return { theme, preference, setTheme };
 }
