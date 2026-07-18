@@ -7,6 +7,7 @@ import * as THREE from "three";
 import { Canvas, useFrame } from "@react-three/fiber";
 import { PerspectiveCamera } from "@react-three/drei";
 
+import { useTheme } from "@/features/theme-toggle";
 import styles from "./Beams.module.css";
 
 type UniformValue = THREE.IUniform<unknown> | unknown;
@@ -191,6 +192,8 @@ export const Beams: FC<BeamsProps> = ({
   rotation = 0
 }) => {
   const meshRef = useRef<THREE.Mesh<THREE.BufferGeometry, THREE.ShaderMaterial>>(null!);
+  const { theme } = useTheme();
+  const backgroundColor = theme === "dark" ? "#000000" : "#cfcfcf";
 
   const beamMaterial = useMemo(
     () =>
@@ -236,7 +239,7 @@ export const Beams: FC<BeamsProps> = ({
         },
         material: { fog: true },
         uniforms: {
-          diffuse: new THREE.Color(...hexToNormalizedRGB("#000000")),
+          diffuse: new THREE.Color(...hexToNormalizedRGB(backgroundColor)),
           time: { shared: true, mixed: true, linked: true, value: 0 },
           roughness: 0.3,
           metalness: 0.3,
@@ -246,7 +249,7 @@ export const Beams: FC<BeamsProps> = ({
           uScale: scale
         }
       }),
-    [speed, noiseIntensity, scale]
+    [speed, noiseIntensity, scale, backgroundColor]
   );
 
   return (
@@ -256,7 +259,7 @@ export const Beams: FC<BeamsProps> = ({
         <DirLight color={lightColor} position={[0, 3, 10]} />
       </group>
       <ambientLight intensity={1} />
-      <color attach="background" args={["#000000"]} />
+      <color attach="background" args={[backgroundColor]} />
       <PerspectiveCamera makeDefault position={[0, 0, 20]} fov={30} />
     </CanvasWrapper>
   );
