@@ -32,6 +32,7 @@
 
   /* Layout */
   --container-width: 1180px;
+  --header-height: 72px;
 
   /* Brand accent is monochrome and inverts per theme — see themes.css */
 

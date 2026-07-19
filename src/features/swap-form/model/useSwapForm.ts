@@ -11,12 +11,13 @@ export function useSwapForm(tokens: Token[], initialSellSymbol?: string) {
   const defaultSell = initialSellSymbol
     ? (tokens.find((token) => token.symbol.toLowerCase() === initialSellSymbol.toLowerCase()) ?? tokens[0])
     : tokens[0];
+  const defaultBuy = tokens.find((token) => token.symbol !== defaultSell.symbol) ?? null;
 
   const [sellToken, setSellTokenState] = useState<Token>(defaultSell);
-  const [buyToken, setBuyTokenState] = useState<Token | null>(null);
+  const [buyToken, setBuyTokenState] = useState<Token | null>(defaultBuy);
   const [sellAmount, setSellAmountState] = useState("");
   const [sellNetwork, setSellNetwork] = useState<Network>(NETWORKS[0]);
-  const [buyNetwork, setBuyNetwork] = useState<Network>(NETWORKS[1]);
+  const [buyNetwork, setBuyNetwork] = useState<Network>(NETWORKS[0]);
 
   const rate = buyToken && buyToken.price > 0 ? sellToken.price / buyToken.price : 0;
 

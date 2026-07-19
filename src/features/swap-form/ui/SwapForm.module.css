@@ -77,10 +77,16 @@
 
 .amountSell {
   grid-area: aSell;
+  border-color: var(--border);
+  cursor: text;
 }
 
 .amountBuy {
   grid-area: aBuy;
+}
+
+.amountSell:hover {
+  border-color: var(--border-strong);
 }
 
 .amountCard:focus-within {

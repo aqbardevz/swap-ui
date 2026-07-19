@@ -23,11 +23,29 @@
 }
 
 .title {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: var(--space-3);
   margin-bottom: var(--space-6);
   text-align: center;
   font-size: 42px;
   font-weight: 700;
   color: var(--text-primary);
+}
+
+.titleIcon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  border-radius: var(--radius-sm);
+  background: #ffffff;
+  border: 1px solid #e4e4e4;
+  color: #171717;
+  transform: rotate(-8deg);
 }
 
 .footer {

@@ -1,6 +1,7 @@
 import { SiDiscord, SiTelegram, SiX } from "react-icons/si";
 import type { Token } from "@/entities/token";
 import { Beams } from "@/shared/ui/Beams";
+import { SwapIcon } from "@/shared/ui/icons";
 import { SwapWidget } from "@/widgets/swap-widget";
 import styles from "./Hero.module.css";
 
@@ -37,7 +38,13 @@ export function Hero({ tokens, initialSellSymbol }: HeroProps) {
         />
       </div>
       <div className={styles.inner}>
-        <h1 className={styles.title}>Swap tokens instantly</h1>
+        <h1 className={styles.title}>
+          <span className={styles.titleText}>Swap</span>
+          <span className={styles.titleIcon}>
+            <SwapIcon size={20} />
+          </span>
+          <span className={styles.titleText}>tokens instantly</span>
+        </h1>
         <SwapWidget tokens={tokens} initialSellSymbol={initialSellSymbol} />
       </div>
 

@@ -73,6 +73,7 @@ export function SwapForm({ form }: { form: ReturnType<typeof useSwapForm> }) {
           className={styles.flipButton}
           aria-label="Flip tokens"
           onClick={flip}
+          disabled={!buyToken}
         >
           <CgArrowsExchangeAlt size={18} />
         </IconButton>

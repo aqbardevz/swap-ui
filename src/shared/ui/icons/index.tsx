@@ -4,6 +4,7 @@ export {
   LuSettings as SettingsIcon,
   LuChevronDown as ChevronDownIcon,
   LuArrowDown as ArrowDownIcon,
+  LuArrowLeft as ArrowLeftIcon,
   LuWallet as WalletIcon,
   LuExternalLink as ExternalLinkIcon,
   LuSearch as SearchIcon,

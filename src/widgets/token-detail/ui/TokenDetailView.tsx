@@ -8,7 +8,7 @@ import {
   formatPercent,
   formatUsd,
 } from "@/shared/lib/format";
-import { SwapIcon } from "@/shared/ui/icons";
+import { ArrowLeftIcon, SwapIcon } from "@/shared/ui/icons";
 import { cn } from "@/shared/lib/cn";
 import { PriceChart } from "./PriceChart";
 import { ChangeChips } from "./ChangeChips";
@@ -30,7 +30,8 @@ export function TokenDetailView({ detail }: { detail: TokenDetail }) {
   return (
     <div>
       <Link href="/market" className={styles.back}>
-        ← Market
+        <ArrowLeftIcon size={16} />
+        Market
       </Link>
 
       <div className={styles.layout}>
